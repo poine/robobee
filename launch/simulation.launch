@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="start_gazebo" default="true" />
+  <!-- <arg name="start_gazebo_gui" default="true" /> -->
+  <arg name="start_viz" default="true" />
+  <arg name="start_kbd" default="true" />
+  <arg name="start_sim_interface" default="true" />
+  <arg name="start_js_teleop" default="true" />
+  <arg name="start_guidance" default="true" />
+  
+  <!--  ****** Gazebo and robot therein *****  -->
+  <group if="$(arg start_gazebo)">
+    <include file="$(find sjtu_drone)/launch/simple.launch">
+      <!-- <arg name="start_gazebo" value="$(arg start_gazebo)" /> -->
+      <!-- <arg name="gz_gui" value="$(arg start_gazebo_gui)" /> -->
+      <!-- <arg name="world_name" value="$(arg world_name)" /> -->
+      <!-- <arg name="robot_name" value="$(arg robot_name)" /> -->
+      <!-- <arg name="robot_initial_xy" value="-x -1.75 -y 1.25"/> -->
+      <arg name="gui" value="false" /> -->
+      <!-- <arg name="paused" value="false"/> -->
+      <!-- <arg name="world_name" value="$(find sjtu_drone)/worlds/contest.world"/> -->
+      <!-- <arg name="world_name" value="$(find sjtu_drone)/worlds/garching_kitchen.world"/> -->
+      <!-- <arg name="world_name" value="$(find sjtu_drone)/worlds/search_and_rescue.world"/> -->
+      <arg name="world_name" value="$(find robobee)/worlds/sjtu-contest.world"/>
+      <!-- <arg name="world_name" value="$(find robobee)/worlds/sjtu-contest-new.world"/> -->
+      <!-- <arg name="world_name" value="/home/poine/work/common_simulations/worlds/track_ethz.world"/> -->
+    </include>
+  </group>
+
+  <!--  ****** Keyboard controller *****  -->
+  <group if="$(arg start_kbd)">
+    <node name="keyboard_ctl" pkg="sjtu_drone" type="drone_keyboard"/>
+  </group>
+
+  <!--  ****** Simulator interface *****  -->
+  <group if="$(arg start_sim_interface)">
+    <node name="simulator_interface" pkg="robobee" type="simulator_interface_node.py"/>
+  </group>
+  
+  <!--  ****** Joystick teleop *****  -->
+  <group if="$(arg start_js_teleop)">
+    <node name="joystick" pkg="joy" type="joy_node"/>
+    <node name="joystick_teleop" pkg="robobee" type="joystick_teleop_node.py"/>
+  </group>
+
+  <!--  ****** Guidance *****  -->
+  <group if="$(arg start_guidance)">
+    <node name="guidance" pkg="robobee" type="guidance_controller_node.py"/>
+  </group>
+
+  <!-- roslaunch sjtu_drone simple.launch -->
+  <!-- rosrun sjtu_drone drone_keyboard -->
+  <!-- ./scripts/test_sjtu_drone.py -->
+  <!-- ./scripts/aruco_node.py _robot_name:=drone _camera:=drone/front_camera _ref_frame=none /drone/front_camera/camera_info:=/camera_info -->
+  <!-- ~/work/common_simulations/scripts/load_smocap_aruco_marker.py -->
+  <!--  ****** Viz *****  -->
+  <group if="$(arg start_viz)">
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robobee)/rviz/drone.rviz" />
+  </group>
+
+
+</launch>
