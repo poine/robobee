@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import sys, time, numpy as np
@@ -10,7 +10,7 @@ import common_control.rospy_utils as cc_rpu
 class Node(p3_rpu.PeriodicNode):
 
     def __init__(self):
-        p3_rpu.PeriodicNode.__init__(self, 'simulator_coms_node')
+        p3_rpu.PeriodicNode.__init__(self, 'simulator_interface_node')
         self.transform_pub = p3_rpu.TransformPublisher()
         self.pose_lst = cc_rpu.PoseListener('/drone/gt_pose')
         
